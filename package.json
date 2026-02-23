@@ -1,0 +1,24 @@
+{
+  "name": "localloop",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm run dev -w apps/backend",
+    "dev:frontend": "npm run dev -w apps/frontend",
+    "build": "npm run build -w apps/backend && npm run build -w apps/frontend",
+    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "start:backend": "npm run start -w apps/backend",
+    "start:frontend": "npm run start -w apps/frontend"
+  },
+  "devDependencies": {
+    "concurrently": "8.2.2"
+  }
+}
+
+
+
