@@ -52,7 +52,7 @@ async function authUser(req: express.Request): Promise<User | null> {
 // Routes API
 
 // Inscription avec email
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/auth/register', async (req: express.Request, res: express.Response) => {
   try {
     const { name, email, username, password } = req.body;
 
@@ -104,7 +104,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 // Connexion avec email
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', async (req: express.Request, res: express.Response) => {
   try {
     const { email, password } = req.body;
 
@@ -147,7 +147,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // Déconnexion
-app.post('/api/auth/logout', async (req, res) => {
+app.post('/api/auth/logout', async (req: express.Request, res: express.Response) => {
   try {
     const auth = req.headers.authorization || '';
     const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
@@ -164,7 +164,7 @@ app.post('/api/auth/logout', async (req, res) => {
 });
 
 // Obtenir les informations de l'utilisateur connecté
-app.get('/api/users/me', async (req, res) => {
+app.get('/api/users/me', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -183,7 +183,7 @@ app.get('/api/users/me', async (req, res) => {
 });
 
 // Obtenir les statistiques de l'utilisateur
-app.get('/api/users/me/stats', async (req, res) => {
+app.get('/api/users/me/stats', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -221,7 +221,7 @@ app.get('/api/users/me/stats', async (req, res) => {
 });
 
 // Rechercher des utilisateurs pour le chat
-app.get('/api/users/search', async (req, res) => {
+app.get('/api/users/search', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -242,7 +242,7 @@ app.get('/api/users/search', async (req, res) => {
 });
 
 // Obtenir les objets
-app.get('/api/items', async (req, res) => {
+app.get('/api/items', async (req: express.Request, res: express.Response) => {
   try {
     const { lat, lon, radius = 10 } = req.query;
 
@@ -266,7 +266,7 @@ app.get('/api/items', async (req, res) => {
 });
 
 // Créer un objet
-app.post('/api/items', async (req, res) => {
+app.post('/api/items', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -287,7 +287,7 @@ app.post('/api/items', async (req, res) => {
 });
 
 // Récupérer un objet par ID
-app.get('/api/items/:id', async (req, res) => {
+app.get('/api/items/:id', async (req: express.Request, res: express.Response) => {
   try {
     const { id } = req.params;
     const item = await query(queries.getItemById, [id]) as any[];
@@ -304,7 +304,7 @@ app.get('/api/items/:id', async (req, res) => {
 });
 
 // Réserver un objet
-app.post('/api/items/:id/reserve', async (req, res) => {
+app.post('/api/items/:id/reserve', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -336,7 +336,7 @@ app.post('/api/items/:id/reserve', async (req, res) => {
 });
 
 // Mettre à jour le statut d'un objet
-app.post('/api/items/:id/status', async (req, res) => {
+app.post('/api/items/:id/status', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -358,7 +358,7 @@ app.post('/api/items/:id/status', async (req, res) => {
 });
 
 // API Chat - Créer ou récupérer une conversation
-app.post('/api/conversations', async (req, res) => {
+app.post('/api/conversations', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -404,7 +404,7 @@ app.post('/api/conversations', async (req, res) => {
 });
 
 // Obtenir les conversations de l'utilisateur
-app.get('/api/conversations', async (req, res) => {
+app.get('/api/conversations', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -422,7 +422,7 @@ app.get('/api/conversations', async (req, res) => {
 
 
 // Obtenir une conversation par ID
-app.get('/api/conversations/:id', async (req, res) => {
+app.get('/api/conversations/:id', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -447,7 +447,7 @@ app.get('/api/conversations/:id', async (req, res) => {
 });
 
 // Obtenir les messages d'une conversation
-app.get('/api/conversations/:id/messages', async (req, res) => {
+app.get('/api/conversations/:id/messages', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -463,7 +463,7 @@ app.get('/api/conversations/:id/messages', async (req, res) => {
 });
 
 // Créer un message
-app.post('/api/conversations/:id/messages', async (req, res) => {
+app.post('/api/conversations/:id/messages', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -497,7 +497,7 @@ app.post('/api/conversations/:id/messages', async (req, res) => {
 });
 
 // Obtenir les annonces de l'utilisateur connecté
-app.get('/api/items/my', async (req, res) => {
+app.get('/api/items/my', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -527,7 +527,7 @@ app.get('/api/items/my', async (req, res) => {
 });
 
 // Obtenir les objets réservés par l'utilisateur connecté
-app.get('/api/items/reserved', async (req, res) => {
+app.get('/api/items/reserved', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
@@ -551,7 +551,7 @@ app.get('/api/items/reserved', async (req, res) => {
 });
 
 // Supprimer une annonce
-app.delete('/api/items/:id', async (req, res) => {
+app.delete('/api/items/:id', async (req: express.Request, res: express.Response) => {
   try {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
