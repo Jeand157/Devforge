@@ -11,14 +11,14 @@ services:
       - key: PORT
         value: 4000
       - key: DB_HOST
-        sync: false # À remplir dans l'interface Render
+        value: yamabiko.proxy.rlwy.net
       - key: DB_PORT
-        sync: false # À remplir dans l'interface Render (14050 pour Railway)
+        value: "14050"
       - key: DB_USER
-        sync: false # À remplir dans l'interface Render
+        value: root
       - key: DB_PASSWORD
-        sync: false # À remplir dans l'interface Render
+        value: qvsdcudxJsCVbSFbdYHrvjlDgioobDBs
       - key: DB_NAME
-        sync: false # À remplir dans l'interface Render
+        value: railway
       - key: FRONTEND_URL
-        sync: false # À remplir avec votre URL Vercel
+        value: https://devforge-frontend.vercel.app
