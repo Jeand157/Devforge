@@ -1,13 +1,17 @@
 'use client'
 
 import { SessionProvider } from 'next-auth/react'
+import { Session } from 'next-auth'
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  session
+}: {
+  children: React.ReactNode,
+  session: Session | null
+}) {
   return (
-    <SessionProvider 
-      refetchInterval={5 * 60} // Rafraîchir la session toutes les 5 minutes
-      refetchOnWindowFocus={true} // Rafraîchir quand la fenêtre reprend le focus
-    >
+    <SessionProvider session={session}>
       {children}
     </SessionProvider>
   )

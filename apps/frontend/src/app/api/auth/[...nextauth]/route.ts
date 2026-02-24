@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { API_CONFIG } from '@/config'
 
 const handler = NextAuth({
   providers: [
@@ -20,7 +21,7 @@ const handler = NextAuth({
         }
 
         try {
-          const response = await fetch('http://localhost:4000/api/auth/login', {
+          const response = await fetch(`${API_CONFIG.baseUrl}/api/auth/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ const handler = NextAuth({
       return token
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         (session.user as any).id = token.id as string
         (session.user as any).username = token.username as string
         (session.user as any).token = token.accessToken as string

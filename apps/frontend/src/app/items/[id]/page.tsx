@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { API_CONFIG } from '@/config'
 import AuthGuard from '@/components/AuthGuard'
 import dynamic from 'next/dynamic'
 
@@ -46,7 +47,7 @@ export default function ItemDetailPage() {
 
   const fetchItem = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/items/${id}`)
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/items/${id}`)
       if (response.ok) {
         const data = await response.json()
         setItem(data)
@@ -65,11 +66,11 @@ export default function ItemDetailPage() {
 
     setIsReserving(true)
     try {
-      const response = await fetch(`http://localhost:4000/api/items/${id}/reserve`, {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/items/${id}/reserve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session.user as any).token}`
+          'Authorization': `Bearer ${session.user.accessToken}`
         }
       })
 
@@ -93,11 +94,11 @@ export default function ItemDetailPage() {
 
     try {
       // Créer ou récupérer une conversation avec le propriétaire
-      const response = await fetch('http://localhost:4000/api/conversations', {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/conversations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session.user as any).token}`
+          'Authorization': `Bearer ${session.user.accessToken}`
         },
         body: JSON.stringify({
           user_b_id: item.owner_id,
@@ -242,7 +243,7 @@ export default function ItemDetailPage() {
                 </div>
 
                 {/* Actions */}
-                {session?.user && item.owner_id !== (session.user as any).id && (
+                {session?.user && String(item.owner_id) !== session.user.id && (
                   <div className="border-t pt-6 space-y-3">
                     {item.status === 'available' && (
                       <button
@@ -297,9 +298,9 @@ export default function ItemDetailPage() {
                   Coordonnées: {Number(item.latitude).toFixed(4)}, {Number(item.longitude).toFixed(4)}
                 </div>
               </div>
-              <MapComponent 
-                latitude={Number(item.latitude)} 
-                longitude={Number(item.longitude)} 
+              <MapComponent
+                latitude={Number(item.latitude)}
+                longitude={Number(item.longitude)}
                 title={item.title}
                 className="w-full h-64"
               />

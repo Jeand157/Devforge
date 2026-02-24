@@ -43,7 +43,7 @@ export default function Navigation() {
           <div className="hidden md:flex items-center space-x-4">
             {session ? (
               <div className="flex items-center space-x-4">
-                <span className="text-gray-700">Bonjour, {session.user?.name || session.user?.email}</span>
+                <span className="text-gray-700">Bonjour, {session.user.name || session.user.email || session.user.username}</span>
                 <button
                   onClick={() => signOut()}
                   className="btn-outline"
@@ -102,7 +102,7 @@ export default function Navigation() {
               <div className="pt-4 border-t border-gray-200">
                 {session ? (
                   <div className="flex flex-col space-y-2">
-                    <span className="text-gray-700">Bonjour, {session.user?.name || session.user?.email}</span>
+                    <span className="text-gray-700">Bonjour, {session.user.name || session.user.email || session.user.username}</span>
                     <button
                       onClick={() => signOut()}
                       className="btn-outline text-left"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
+import { API_CONFIG } from '@/config'
 import AuthGuard from '@/components/AuthGuard'
 
 interface UserStats {
@@ -37,7 +38,7 @@ export default function ProfilePage() {
   const fetchUserData = async () => {
     try {
       // Récupérer les statistiques utilisateur
-      const statsResponse = await fetch('http://localhost:4000/api/users/me/stats', {
+      const statsResponse = await fetch(`${API_CONFIG.baseUrl}/api/users/me/stats`, {
         headers: {
           'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
         }
@@ -49,7 +50,7 @@ export default function ProfilePage() {
       }
 
       // Récupérer les annonces de l'utilisateur
-      const itemsResponse = await fetch('http://localhost:4000/api/items/my', {
+      const itemsResponse = await fetch(`${API_CONFIG.baseUrl}/api/items/my`, {
         headers: {
           'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
         }
@@ -61,7 +62,7 @@ export default function ProfilePage() {
       }
 
       // Récupérer les objets réservés par l'utilisateur
-      const reservedResponse = await fetch('http://localhost:4000/api/items/reserved', {
+      const reservedResponse = await fetch(`${API_CONFIG.baseUrl}/api/items/reserved`, {
         headers: {
           'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
         }
@@ -97,7 +98,7 @@ export default function ProfilePage() {
     try {
       // Supprimer toutes les annonces une par une
       for (const item of userItems) {
-        const response = await fetch(`http://localhost:4000/api/items/${item.id}`, {
+        const response = await fetch(`${API_CONFIG.baseUrl}/api/items/${item.id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
@@ -360,16 +361,14 @@ export default function ProfilePage() {
                             Voir détails
                           </a>
                           <button
-                            onClick={() => {
+                            onClick={async () => { // Added async here
                               if (confirm(`Êtes-vous sûr de vouloir supprimer "${item.title}" ?`)) {
                                 // Supprimer cette annonce spécifique
-                                fetch(`http://localhost:4000/api/items/${item.id}`, {
+                                const response = await fetch(`${API_CONFIG.baseUrl}/api/items/${item.id}`, { // Corrected URL and removed extra comma
                                   method: 'DELETE',
                                   headers: {
                                     'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
                                   }
-                                }).then(() => {
-                                  fetchUserData(); // Recharger les données
                                 });
                               }
                             }}

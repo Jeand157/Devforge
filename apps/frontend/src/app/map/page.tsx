@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { API_CONFIG } from '@/config'
 import AuthGuard from '@/components/AuthGuard'
 
 // Import dynamique pour éviter les erreurs SSR
@@ -66,7 +67,7 @@ export default function MapPage() {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/items')
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/items`)
       if (response.ok) {
         const data = await response.json()
         setItems(data)
@@ -139,17 +140,17 @@ export default function MapPage() {
       return
     }
 
-    if (ownerId === (session.user as any).id) {
+    if (String(ownerId) === session.user.id) {
       alert("C'est votre propre annonce !")
       return
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/conversations', {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/conversations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session.user as any).token}`
+          'Authorization': `Bearer ${session.user.accessToken}`
         },
         body: JSON.stringify({
           otherUserId: ownerId

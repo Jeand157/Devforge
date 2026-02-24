@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import AuthGuard from '@/components/AuthGuard'
 import { useSession } from 'next-auth/react'
+import { API_CONFIG } from '@/config'
 
 // Service de géocodage avec coordonnées prédéfinies
 function geocodeLocation(locationText: string) {
@@ -100,7 +101,7 @@ export default function PublishPage() {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
-    const file = e.dataTransfer.files[0]
+    const file = e.dataTransfer?.files[0]
     if (file && file.type.startsWith('image/')) {
       setImage(file)
 
@@ -153,11 +154,11 @@ export default function PublishPage() {
       }
 
       // Créer l'annonce
-      const response = await fetch('http://localhost:4000/api/items', {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
+          'Authorization': `Bearer ${session?.user?.accessToken || ''}`
         },
         body: JSON.stringify({
           title: formData.title,

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
+import { API_CONFIG } from '@/config'
 import AuthGuard from '@/components/AuthGuard'
 
 interface Message {
@@ -54,9 +55,9 @@ export default function ChatPage() {
 
   const fetchConversations = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/conversations', {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/conversations`, {
         headers: {
-          'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
+          'Authorization': `Bearer ${session?.user?.accessToken || ''}`
         }
       })
 
@@ -73,9 +74,9 @@ export default function ChatPage() {
 
   const fetchMessages = async (conversationId: number) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/conversations/${conversationId}/messages`, {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/conversations/${conversationId}/messages`, {
         headers: {
-          'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
+          'Authorization': `Bearer ${session?.user?.accessToken || ''}`
         }
       })
 
@@ -92,11 +93,11 @@ export default function ChatPage() {
     if (!newMessage.trim() || !selectedConversation) return
 
     try {
-      const response = await fetch(`http://localhost:4000/api/conversations/${selectedConversation.id}/messages`, {
+      const response = await fetch(`${API_CONFIG.baseUrl}/api/conversations/${selectedConversation.id}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session?.user as any)?.token || ''}`
+          'Authorization': `Bearer ${session?.user?.accessToken || ''}`
         },
         body: JSON.stringify({
           content: newMessage.trim()
@@ -213,16 +214,16 @@ export default function ChatPage() {
                       messages.map((message) => (
                         <div
                           key={message.id}
-                          className={`flex ${message.sender_id === (session?.user as any)?.id ? 'justify-end' : 'justify-start'}`}
+                          className={`flex ${String(message.sender_id) === session?.user?.id ? 'justify-end' : 'justify-start'}`}
                         >
                           <div
-                            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.sender_id === (session?.user as any)?.id
+                            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${String(message.sender_id) === session?.user?.id
                               ? 'bg-green-500 text-white'
                               : 'bg-gray-200 text-gray-900'
                               }`}
                           >
                             <p className="text-sm">{message.content}</p>
-                            <p className={`text-xs mt-1 ${message.sender_id === (session?.user as any)?.id
+                            <p className={`text-xs mt-1 ${String(message.sender_id) === session?.user?.id
                               ? 'text-green-100'
                               : 'text-gray-500'
                               }`}>
