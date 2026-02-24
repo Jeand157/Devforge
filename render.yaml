@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: localloop-backend
+    name: localloop-backend-jeand157
     env: node
     plan: free # Vous pouvez changer pour un plan payant si nécessaire
     buildCommand: npm install && npm run build -w apps/backend
