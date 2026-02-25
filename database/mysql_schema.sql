@@ -9,7 +9,10 @@ USE localloop;
 CREATE TABLE users (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20) UNIQUE NOT NULL,
+    email VARCHAR(191) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    avatar_url TEXT,
+    phone VARCHAR(20) UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -43,6 +46,8 @@ CREATE TABLE conversations (
     user_b_id CHAR(36),
     user_a_name VARCHAR(100) NOT NULL,
     user_b_name VARCHAR(100) NOT NULL,
+    user_a_username VARCHAR(100),
+    user_b_username VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY unique_conversation (user_a_id, user_b_id),
@@ -56,6 +61,7 @@ CREATE TABLE messages (
     conversation_id CHAR(36) NOT NULL,
     sender_id CHAR(36),
     sender_name VARCHAR(100) NOT NULL,
+    sender_username VARCHAR(100),
     text TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_conversation (conversation_id),
