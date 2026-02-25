@@ -166,6 +166,7 @@ export default function PublishPage() {
           latitude: geocodeResult.latitude,
           longitude: geocodeResult.longitude,
           location: formData.location,
+          category: formData.category,
           imageUrl: imageUrl
         }),
       })

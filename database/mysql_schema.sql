@@ -23,6 +23,7 @@ CREATE TABLE items (
     latitude DECIMAL(10, 8) NOT NULL,
     longitude DECIMAL(11, 8) NOT NULL,
     image_url TEXT,
+    category VARCHAR(100),
     status ENUM('available', 'reserved', 'given') NOT NULL DEFAULT 'available',
     owner_id CHAR(36),
     owner_name VARCHAR(100),

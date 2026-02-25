@@ -271,13 +271,13 @@ app.post('/api/items', async (req: express.Request, res: express.Response) => {
     const user = await authUser(req);
     if (!user) return res.status(401).json({ error: 'Non autorisé' });
 
-    const { title, description, imageUrl, latitude, longitude, location } = req.body;
+    const { title, description, imageUrl, latitude, longitude, location, category } = req.body;
 
     if (!title || !description || !latitude || !longitude || !location) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
 
-    await query(queries.createItem, [title, description, latitude, longitude, location, imageUrl, user.id]);
+    await query(queries.createItem, [title, description, latitude, longitude, location, imageUrl, category, user.id]);
 
     res.json({ message: 'Objet créé avec succès' });
   } catch (error) {
