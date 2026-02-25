@@ -78,6 +78,7 @@ export default function RegisterPage() {
         setError(errorData.message || 'Erreur lors de l\'inscription')
       }
     } catch (err) {
+      console.error('Registration error detail:', err)
       setError('Une erreur est survenue')
     } finally {
       setIsLoading(false)
